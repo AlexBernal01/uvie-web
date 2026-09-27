@@ -1,6 +1,6 @@
 import { contenido } from '../data/contenido';
 
-export default function ProductosInsignia() {
+export default function Productos() {
   return (
     <section id="productos" className="py-16">
       <div className="max-w-6xl mx-auto px-4">
