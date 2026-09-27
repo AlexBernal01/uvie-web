@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@400;600;700&family=Montserrat:wght@600;700;800&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-buap-azul-oscuro: #122e48;
+  --color-buap-azul-claro: #09b5e2;
+  --color-buap-negro: #1a1a1a;
+  --font-sans: "Source Sans Pro", system-ui, sans-serif;
+  --font-display: "Montserrat", system-ui, sans-serif;
+}
