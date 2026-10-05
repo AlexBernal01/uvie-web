@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { GoogleGenAI } from '@google/genai';
 import { promptsCarreras } from '../data/contenido';
 import { UVIE_BASE64 } from '../data/uvie-base64';
+import { Link } from 'react-router-dom';
 
 const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
@@ -127,18 +128,20 @@ export default function Chatbot() {
       if (contexto.rol) contextoExtra += `El usuario es ${contexto.rol}. `;
       if (carrera) contextoExtra += `Pertenece a la carrera de ${carrera}. `;
 
-      const interaction = await ai.interactions.create({
-        model: 'gemini-3.6-flash',
-        input: [
-          { type: 'document', data: UVIE_BASE64, mime_type: 'application/pdf' },
+      const interaction = await ai.models.generateContent({
+        model: 'gemini-3.8-flash',
+        contents: [
           {
-            type: 'text',
-            text: `${systemPrompt}\n\n${contextoExtra}\nMensaje del usuario: ${mensajeUsuario}`
+            role: 'user',
+            parts: [
+              { inlineData: { mimeType: 'application/pdf', data: UVIE_BASE64 } },
+              { text: `${systemPrompt}\n\n${contextoExtra}\nMensaje del usuario: ${mensajeUsuario}` }
+            ]
           }
         ]
       });
 
-      const textoRespuesta = interaction.output_text;
+      const textoRespuesta = interaction.text;
 
       setMensajes(prev => [...prev, { rol: 'bot', texto: textoRespuesta }]);
     } catch (error) {
@@ -171,9 +174,17 @@ export default function Chatbot() {
 
       {abierto && (
         <div className="fixed bottom-24 right-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl flex flex-col z-50 overflow-hidden">
-          <div className="bg-buap-azul-oscuro text-white p-4">
+          <div className="bg-buap-azul-oscuro text-white p-4 relative">
             <h3 className="font-display font-bold">Asistente UVIE</h3>
             <p className="text-xs text-white/70">Cuéntame tu perfil y te ayudo</p>
+
+            <Link
+              to="/banco-prompters"
+              onClick={() => setAbierto(false)}
+              className="absolute top-4 right-4 bg-white text-buap-azul-oscuro px-3 py-1.5 rounded-lg text-xs font-semibold hover:bg-buap-azul-claro transition"
+            >
+              Banco Prompters
+            </Link>
           </div>
 
           <div ref={chatRef} className="flex-1 overflow-y-auto p-4 space-y-3">

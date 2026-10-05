@@ -1,13 +1,15 @@
 import { Outlet } from 'react-router-dom';
 import Header from './Header';
+import Footer from './Footer';
 
 export default function Layout() {
   return (
     <>
       <Header />
-      <main>
+      <main className="min-h-[calc(100vh-200px)]">
         <Outlet />
       </main>
+      <Footer />
     </>
   );
 }
